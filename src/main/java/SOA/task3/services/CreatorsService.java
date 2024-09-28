@@ -1,4 +1,4 @@
-package SOA.task3.Services;
+package SOA.task3.services;
 
 import java.util.ArrayList;
 import java.util.List;

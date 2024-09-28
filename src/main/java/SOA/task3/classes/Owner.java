@@ -3,31 +3,40 @@ package SOA.task3.classes;
 import java.util.ArrayList;
 
 public class Owner {
-	private int id;
+	private long id;
 	private String name;
-	private ArrayList<Gnome> gnomes;
+	private ArrayList<Long> gnomeIds;
+	
+	public Owner() {
+	}
 	
 	@Override
 	public String toString() {
-		return  String.format("Id: %d; String: %s; Creator %s", id, name, gnomes.toString());
+		return  String.format("Id: %d; String: %s; Creator %s", id, name, gnomeIds.toString());
 	}
-	
-	public int getId() {
+
+	public long getId() {
 		return id;
 	}
-	public void setId(int id) {
+
+	public void setId(long id) {
 		this.id = id;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	public ArrayList<Gnome> getGnomes() {
-		return gnomes;
+
+	public ArrayList<Long> getGnomeIds() {
+		return gnomeIds;
 	}
-	public void setGnomes(ArrayList<Gnome> gnomes) {
-		this.gnomes = gnomes;
+
+	public void setGnomeIds(ArrayList<Long> gnomeIds) {
+		this.gnomeIds = gnomeIds;
 	}
+	
 } 

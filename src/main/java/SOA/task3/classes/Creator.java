@@ -1,47 +1,52 @@
 package SOA.task3.classes;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
+
+import jakarta.validation.constraints.NotNull;
 
 public class Creator {
-	static long id_counter = 0;
-	
 	private long id;
+	@NotNull(message = "name is required")
 	private String name;
-	private ArrayList<Gnome> gnomes;
-	
+	@NotNull(message = "gnomesIds is required")
+	private ArrayList<Long> gnomesIds;
+
+	public Creator() {
+	}
+
 	public Creator(String name) {
-		this.id = id_counter++;
 		this.name = name;
-		gnomes = new ArrayList<Gnome>();
+		gnomesIds = new ArrayList<Long>();
 	}
 
 	@Override
 	public String toString() {
-		String gnomesString = gnomes.stream()
-                .map(Gnome::getNickName)
-                .collect(Collectors.joining(", "));
-		return  String.format("Id: %d; Name: %s; Gnomes %s", id, name, gnomesString);
+		String gnomesString = gnomesIds.toString();
+		return String.format("Id: %d; Name: %s; Gnomes %s", id, name, gnomesString);
 	}
-	
+
 	public long getId() {
 		return id;
 	}
+
 	public void setId(long id) {
 		this.id = id;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	public ArrayList<Gnome> getGnomes() {
-		return gnomes;
+
+	public ArrayList<Long> getGnomesIds() {
+		return gnomesIds;
 	}
-	public void setGnomes(ArrayList<Gnome> gnomes) {
-		this.gnomes = gnomes;
+
+	public void setGnomesIds(ArrayList<Long> gnomesIds) {
+		this.gnomesIds = gnomesIds;
 	}
-	
-	
+
 }

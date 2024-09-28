@@ -1,54 +1,50 @@
 package SOA.task3.classes;
 
 public class Gnome {
-	private int id;
+	private long id;
 	private String nickName;
-	private Owner owner;
-	private Creator creator;
+	private long ownerId; // -1 for no owner
+	private long creatorId;
+	
+	public Gnome() {
+	}
 	
 	
 	@Override
 	public String toString() {
-		return  String.format("Id: %d; Owner: %s; Creator %s", id, owner.getName(), creator.getName());
+		return  String.format("Id: %d; Owner: %d; Creator %d", id, ownerId, creatorId);
 	}
-
-
-	public int getId() {
+	
+	public long getId() {
 		return id;
 	}
 
-
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
-
-
-	public Owner getOwner() {
-		return owner;
-	}
-
-
-	public void setOwner(Owner owner) {
-		this.owner = owner;
-	}
-
-
-	public Creator getCreator() {
-		return creator;
-	}
-
-
-	public void setCreator(Creator creator) {
-		this.creator = creator;
-	}
-
 
 	public String getNickName() {
 		return nickName;
 	}
 
-
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
 	}
+
+	public long getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(long ownerId) {
+		this.ownerId = ownerId;
+	}
+
+	public long getCreatorId() {
+		return creatorId;
+	}
+
+	public void setCreatorId(long creatorId) {
+		this.creatorId = creatorId;
+	}
+
 }
