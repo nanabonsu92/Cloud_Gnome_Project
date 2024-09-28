@@ -10,7 +10,7 @@
     <name>SOA_task3</name>
 
     <build>
-        <finalName>SOA_2024_L3_MyRESTws</finalName>
+        <finalName>task3</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -78,13 +78,23 @@
            <version>20200518</version>
         </dependency>
         
-         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-war-plugin -->
-		<dependency>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-war-plugin</artifactId>
-			<version>3.2.3</version>
+        <dependency>
+	        <groupId>org.glassfish.jersey.media</groupId>
+	        <artifactId>jersey-media-jaxb</artifactId>
+   		</dependency>
+   		
+	   	<dependency>
+		    <groupId>jakarta.xml.bind</groupId>
+		    <artifactId>jakarta.xml.bind-api</artifactId>
+		    <version>3.0.1</version> <!-- or the version that matches your project's needs -->
 		</dependency>
 		
+		<dependency>
+		    <groupId>org.glassfish.jaxb</groupId>
+		    <artifactId>jaxb-runtime</artifactId>
+		    <version>3.0.1</version>
+		</dependency>
+        
 		<dependency>
 		    <groupId>jakarta.servlet</groupId>
 		    <artifactId>jakarta.servlet-api</artifactId>
