@@ -50,8 +50,8 @@ public class Gnomes {
 	
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public Optional<Gnome> updateGnomeOwner(@QueryParam("oldOwnerId") long oldOwnerId, @QueryParam("newOwnerId") long newOwnerId) {
-		return gnomeService.updateGnomeOwner(oldOwnerId, newOwnerId);
+	public Optional<Gnome> updateGnomeOwner(@QueryParam("gnomeId") long gnomeId, @QueryParam("newOwnerId") long newOwnerId) {
+		return gnomeService.updateGnomeOwner(gnomeId, newOwnerId);
 	}
 	
 	@DELETE
