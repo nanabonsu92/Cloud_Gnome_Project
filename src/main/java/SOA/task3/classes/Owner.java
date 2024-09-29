@@ -7,9 +7,10 @@ public class Owner {
 	private String name;
 	private ArrayList<Long> gnomeIds;
 	
-	public Owner() {
+	public Owner(String string) {
 	}
 	
+
 	@Override
 	public String toString() {
 		return  String.format("Id: %d; String: %s; Creator %s", id, name, gnomeIds.toString());
