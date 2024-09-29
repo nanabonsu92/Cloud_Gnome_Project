@@ -11,8 +11,13 @@
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>SOA.task3</param-value>
+            <param-value>SOA.task3</param-value> <!-- Ensure this points to the correct package -->
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Jersey Web Application</servlet-name>
+        <url-pattern>/api/*</url-pattern> <!-- URL pattern for the REST resources -->
+    </servlet-mapping>
 </web-app>
