@@ -1,8 +1,10 @@
 package SOA.task3.classes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.ws.rs.core.Link;
 
 public class Creator {
 	private long id;
@@ -11,12 +13,16 @@ public class Creator {
 	@NotNull(message = "gnomesIds is required")
 	private ArrayList<Long> gnomesIds;
 
+	private List<Link> links = new ArrayList<>();
+
 	public Creator() {
 	}
 
-	public Creator(String name) {
+	public Creator(long id, String name, ArrayList<Long> gnomesIds) {
+		this.id = id;
 		this.name = name;
-		gnomesIds = new ArrayList<Long>();
+		this.gnomesIds = gnomesIds;
+
 	}
 
 	@Override
@@ -47,6 +53,14 @@ public class Creator {
 
 	public void setGnomesIds(ArrayList<Long> gnomesIds) {
 		this.gnomesIds = gnomesIds;
+	}
+
+	public List<Link> getLinks() {
+		return links;
+	}
+
+	public void setLinks(List<Link> links) {
+		this.links = links;
 	}
 
 }
