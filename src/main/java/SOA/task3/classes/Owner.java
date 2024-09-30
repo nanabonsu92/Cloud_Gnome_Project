@@ -1,43 +1,80 @@
 package SOA.task3.classes;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import jakarta.ws.rs.core.Link;
 
 public class Owner {
-	private long id;
-	private String name;
-	private ArrayList<Long> gnomeIds;
-	
-	public Owner(String string) {
-	}
-	
 
-	@Override
-	public String toString() {
-		return  String.format("Id: %d; String: %s; Creator %s", id, name, gnomeIds.toString());
-	}
+    private long id;
 
-	public long getId() {
-		return id;
-	}
+    @NotNull(message = "Name cannot be null")
+    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
+    private String name;
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    // List of Gnome objects owned by this Owner
+    @NotNull(message = "Gnomes cannot be null")
+    private List<Gnome> gnomes = new ArrayList<>();
 
-	public String getName() {
-		return name;
-	}
+    // HATEOAS links
+    private List<Link> links = new ArrayList<>();
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public Owner() {
+        this.gnomes = new ArrayList<>();
+    }
 
-	public ArrayList<Long> getGnomeIds() {
-		return gnomeIds;
-	}
+    public Owner(String name) {
+        this.name = name;
+        this.gnomes = new ArrayList<>();
+    }
 
-	public void setGnomeIds(ArrayList<Long> gnomeIds) {
-		this.gnomeIds = gnomeIds;
-	}
-	
-} 
+    @Override
+    public String toString() {
+        return String.format("Id: %d; Name: %s; Gnomes: %s", id, name, gnomes.toString());
+    }
+
+    // Getters and setters
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // Get the list of Gnomes owned by this owner
+    public List<Gnome> getGnomes() {
+        return gnomes;
+    }
+
+    // Set the list of Gnomes owned by this owner
+    public void setGnomes(List<Gnome> gnomes) {
+        this.gnomes = gnomes;
+    }
+
+    // Add a Gnome to the Owner's list
+    public void addGnome(Gnome gnome) {
+        gnomes.add(gnome);
+        gnome.setOwnerId(this.id);  // Link the Gnome to this owner
+    }
+
+    // HATEOAS Links handling
+    public List<Link> getLinks() {
+        return links;
+    }
+
+    public void addLink(Link link) {
+        links.add(link);
+    }
+}
