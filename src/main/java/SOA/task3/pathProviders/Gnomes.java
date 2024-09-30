@@ -6,6 +6,9 @@ import java.util.Optional;
 import SOA.task3.classes.Gnome;
 import SOA.task3.exceptions.IdNotFoundException;
 import SOA.task3.services.GnomeService;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -52,7 +55,9 @@ public class Gnomes {
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public Gnome setGnome(@QueryParam("nickname") String nickName, @QueryParam("creatorId") long creatorId) {
+	public Gnome setGnome(
+			@QueryParam("nickname") @NotNull(message = "Nickname cannot be null") @Size(min = 3, max = 50, message = "Nickname must be between 3 and 50 characters") String nickName,
+			@QueryParam("creatorId") @NotNull(message = "creatorId cannot be null") @Min(value = 0, message = "Creator ID must be a positive number") long creatorId) {
 		Gnome new_gnome = gnomeService.addGnome(nickName, creatorId);
 		addHateoasLinks(new_gnome);
 
@@ -61,8 +66,9 @@ public class Gnomes {
 
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public Optional<Gnome> updateGnomeOwner(@QueryParam("gnomeId") long gnomeId,
-			@QueryParam("newOwnerId") long newOwnerId) {
+	public Optional<Gnome> updateGnomeOwner(
+			@QueryParam("gnomeId") @NotNull(message = "gnomeId cannot be null") long gnomeId,
+			@QueryParam("newOwnerId") @NotNull(message = "newOwnerId cannot be null") long newOwnerId) {
 		Optional<Gnome> updatedGnome = gnomeService.updateGnomeOwner(gnomeId, newOwnerId);
 		updatedGnome.ifPresent(this::addHateoasLinks);
 		return updatedGnome;
@@ -70,7 +76,7 @@ public class Gnomes {
 
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	public boolean deleteGnome(@QueryParam("gnomeId") long gnomeId) {
+	public boolean deleteGnome(@QueryParam("gnomeId") @NotNull(message = "gnomeId cannot be null") long gnomeId) {
 		return gnomeService.deleteGnome(gnomeId);
 	}
 
