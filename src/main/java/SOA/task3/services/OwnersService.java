@@ -2,10 +2,11 @@ package SOA.task3.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import SOA.task3.classes.Owner;
+
 import SOA.task3.classes.Gnome;
-import SOA.task3.exceptions.IdNotFoundException;
+import SOA.task3.classes.Owner;
 import SOA.task3.exceptions.IdAlreadyInUseException;
+import SOA.task3.exceptions.IdNotFoundException;
 
 public class OwnersService {
     private static ArrayList<Owner> ownerList = new ArrayList<>();
