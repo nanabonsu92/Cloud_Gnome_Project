@@ -12,11 +12,11 @@ public class CreatorsService {
 	// for testing
 	static {
 		ArrayList<Long> a = new ArrayList<Long>();
-		a.add(0l);
 		a.add(1l);
+		a.add(2l);
 		creatorsList.add(new Creator(0, "Alice", a));
 		ArrayList<Long> b = new ArrayList<Long>();
-		b.add(0l);
+		b.add(3l);
 		creatorsList.add(new Creator(1, "Bob", b));
 		creatorsList.add(new Creator(2, "Charlie", new ArrayList<Long>()));
 	}

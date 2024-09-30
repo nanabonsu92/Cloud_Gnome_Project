@@ -6,14 +6,17 @@ public class Owner {
 	private long id;
 	private String name;
 	private ArrayList<Long> gnomeIds;
-	
-	public Owner(String string) {
+
+	public Owner(long id, String name, ArrayList<Long> gnomeIds) {
+		this.id = id;
+		this.name = name;
+		this.gnomeIds = gnomeIds;
+
 	}
-	
 
 	@Override
 	public String toString() {
-		return  String.format("Id: %d; String: %s; Creator %s", id, name, gnomeIds.toString());
+		return String.format("Id: %d; String: %s; Creator %s", id, name, gnomeIds.toString());
 	}
 
 	public long getId() {
@@ -39,5 +42,5 @@ public class Owner {
 	public void setGnomeIds(ArrayList<Long> gnomeIds) {
 		this.gnomeIds = gnomeIds;
 	}
-	
-} 
+
+}

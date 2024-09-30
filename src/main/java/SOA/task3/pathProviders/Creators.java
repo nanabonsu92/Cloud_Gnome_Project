@@ -63,7 +63,7 @@ public class Creators {
 
 	@PUT
 	@Path("/{creatorId}")
-	public Creator updateCreator(@PathParam("creatorId") long id, Creator creator) {
+	public Creator updateCreator(@PathParam("creatorId") long id, @Valid Creator creator) {
 		Creator c = creatorsService.updateCreator(id, creator);
 		setHATEOASLinks(c);
 		return c;
@@ -83,6 +83,12 @@ public class Creators {
 
 		List<Link> links = new ArrayList<Link>();
 		links.add(selfLink);
+
+		for (Long l : creator.getGnomesIds()) {
+			Link gnomeLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("gnomes").path(l.toString()))
+					.rel("gnome_" + l.toString()).build();
+			links.add(gnomeLink);
+		}
 
 		creator.setLinks(links);
 	}
