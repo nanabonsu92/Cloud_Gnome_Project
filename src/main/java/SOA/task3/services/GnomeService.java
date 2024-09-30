@@ -2,7 +2,7 @@ package SOA.task3.services;
 
 import SOA.task3.classes.Gnome;
 import SOA.task3.classes.Creator;
-import SOA.task3.classes.Link;
+import jakarta.ws.rs.core.Link;
 import SOA.task3.exceptions.IdNotFoundException;
 
 
@@ -74,33 +74,35 @@ public class GnomeService {
 	}
 	
 	private void setCreator_link(long gnomeId, long creatorId) {
-		Optional<Gnome> gnome = getGnomeById(gnomeId);
-		if (gnome.isPresent()) {
-			String link = "/creator/" + creatorId;
-			String rel = "creator";
-			Link creator_link = new Link();
-			creator_link.setLink(link);
-			creator_link.setRel(rel);
-			gnome.get().setCreator_link(creator_link);
-			
-		}else {
-			throw new IdNotFoundException("Gnome Id: " + gnomeId + " not found");
-		}
-		
+	    Optional<Gnome> gnome = getGnomeById(gnomeId);
+	    if (gnome.isPresent()) {
+	        // Create the creator link using jakarta.ws.rs.core.Link
+	        Link creator_link = Link.fromUri("/creator/" + creatorId)
+	                .rel("creator")
+	                .build();
+	        
+	        // Set the creator link in the gnome object
+	        gnome.get().setCreator_link(creator_link);
+	        
+	    } else {
+	        throw new IdNotFoundException("Gnome Id: " + gnomeId + " not found");
+	    }
 	}
-	
+
 	private void setOwner_link(long gnomeId, long ownerId) {
-		Optional<Gnome> gnome = getGnomeById(gnomeId);
-		if (gnome.isPresent()) {
-			String link = "/owner/" + ownerId;
-			String rel = "owner";
-			Link owner_link = new Link();
-			owner_link.setLink(link);
-			owner_link.setRel(rel);
-			gnome.get().setOwner_link(owner_link);
-		}else {
-			throw new IdNotFoundException("Gnome Id: " + gnomeId + " not found");
-		}
+	    Optional<Gnome> gnome = getGnomeById(gnomeId);
+	    if (gnome.isPresent()) {
+	        // Create the owner link using jakarta.ws.rs.core.Link
+	        Link owner_link = Link.fromUri("/owner/" + ownerId)
+	                .rel("owner")
+	                .build();
+	        
+	        // Set the owner link in the gnome object
+	        gnome.get().setOwner_link(owner_link);
+	        
+	    } else {
+	        throw new IdNotFoundException("Gnome Id: " + gnomeId + " not found");
+	    }
 	}
 
 
