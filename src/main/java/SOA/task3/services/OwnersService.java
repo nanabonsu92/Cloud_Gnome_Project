@@ -10,12 +10,16 @@ import SOA.task3.exceptions.IdNotFoundException;
 
 public class OwnersService {
     private static ArrayList<Owner> ownerList = new ArrayList<>();
+    private long idCounter = ownerList.stream().mapToLong(Owner::getId).max().orElse(0) + 1;
 
     // Pre-populate some owners for testing
     static {
-        Owner alice = new Owner("Alice");
+    	Owner alice = new Owner("Alice");
+        alice.setId(1);  // Assign unique IDs
         Owner bob = new Owner("Bob");
+        bob.setId(2);
         Owner charlie = new Owner("Charlie");
+        charlie.setId(3);
 
         // Adding sample gnomes to owners for testing purposes
         Gnome gnome1 = new Gnome();
@@ -54,11 +58,10 @@ public class OwnersService {
 
     // Add a new owner
     public Owner addOwner(Owner owner) {
-        // Check if the ID is already in use
-        if (ownerList.stream().anyMatch(o -> o.getId() == owner.getId())) {
-            throw new IdAlreadyInUseException("Owner ID: " + owner.getId() + " already in use");
-        }
+    	
+    	owner.setId(idCounter++);
         ownerList.add(owner);
+        
         return owner;
     }
 

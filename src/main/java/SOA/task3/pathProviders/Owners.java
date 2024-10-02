@@ -62,9 +62,6 @@ public class Owners {
     // POST /owners - Add a new owner
     @POST
     public Response addOwner(@Valid Owner owner) {
-        if (ownersService.getOwnerFromId(owner.getId()) != null) {
-            throw new IdAlreadyInUseException("Owner ID: " + owner.getId() + " already in use");
-        }
 
         Owner newOwner = ownersService.addOwner(owner);
         
