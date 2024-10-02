@@ -2,7 +2,7 @@ package SOA.task3.classes;
 
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.ws.rs.core.Link;
+import SOA.task3.classes.SimpleLink;
 
 
 public class Gnome {
@@ -12,9 +12,7 @@ public class Gnome {
 	private long creatorId;
 	
 	// links
-	private Link owner_link;
-	private Link creator_link;
-	private List<Link> links = new ArrayList<>();
+	private List<SimpleLink> links = new ArrayList<>();
 	
 	public Gnome() {
 	}
@@ -58,27 +56,12 @@ public class Gnome {
 	}
 
 
-	public Link getCreator_link() {
-        return creator_link;
-    }
 
-    public void setCreator_link(Link creator_link) {
-        this.creator_link = creator_link;
-    }
-
-    public Link getOwner_link() {
-        return owner_link;
-    }
-
-    public void setOwner_link(Link owner_link) {
-        this.owner_link = owner_link;
-    }
-
-    public List<Link> getLinks() {
+    public List<SimpleLink> getLinks() {
         return links;
     }
 
-    public void addLink(Link link) {
+    public void addLink(SimpleLink link) {
         this.links.add(link);
     }
 

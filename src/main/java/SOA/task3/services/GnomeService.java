@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import SOA.task3.classes.Gnome;
 import SOA.task3.exceptions.IdNotFoundException;
-import jakarta.ws.rs.core.Link;
+import SOA.task3.classes.SimpleLink;
 
 public class GnomeService {
 	// The singleton instance, declared as volatile for thread safety
@@ -70,31 +70,34 @@ public class GnomeService {
 	}
 
 	private void setCreator_link(long gnomeId, long creatorId) {
-		Optional<Gnome> gnome = getGnomeById(gnomeId);
-		if (gnome.isPresent()) {
-			// Create the creator link using jakarta.ws.rs.core.Link
-			Link creator_link = Link.fromUri("/creator/" + creatorId).rel("creator").build();
+	    Optional<Gnome> gnome = getGnomeById(gnomeId);
+	    if (gnome.isPresent()) {
+	        // Create the creator link using SimpleLink
+	        String creatorHref = "/creator/" + creatorId;
+	        SimpleLink creatorLink = new SimpleLink("creator", creatorHref);
 
-			// Set the creator link in the gnome object
-			gnome.get().setCreator_link(creator_link);
+	        // Add the creator link to the gnome object
+	        gnome.get().addLink(creatorLink);
 
-		} else {
-			throw new IdNotFoundException("Gnome Id: " + gnomeId + " not found");
-		}
+	    } else {
+	        throw new IdNotFoundException("Gnome Id: " + gnomeId + " not found");
+	    }
 	}
 
 	private void setOwner_link(long gnomeId, long ownerId) {
-		Optional<Gnome> gnome = getGnomeById(gnomeId);
-		if (gnome.isPresent()) {
-			// Create the owner link using jakarta.ws.rs.core.Link
-			Link owner_link = Link.fromUri("/owner/" + ownerId).rel("owner").build();
+	    Optional<Gnome> gnome = getGnomeById(gnomeId);
+	    if (gnome.isPresent()) {
+	        // Create the owner link using SimpleLink
+	        String ownerHref = "/owner/" + ownerId;
+	        SimpleLink ownerLink = new SimpleLink("owner", ownerHref);
 
-			// Set the owner link in the gnome object
-			gnome.get().setOwner_link(owner_link);
+	        // Add the owner link to the gnome object
+	        gnome.get().addLink(ownerLink);
 
-		} else {
-			throw new IdNotFoundException("Gnome Id: " + gnomeId + " not found");
-		}
+	    } else {
+	        throw new IdNotFoundException("Gnome Id: " + gnomeId + " not found");
+	    }
 	}
+
 
 }

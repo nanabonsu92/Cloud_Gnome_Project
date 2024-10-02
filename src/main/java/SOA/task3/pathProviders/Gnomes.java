@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import SOA.task3.classes.Gnome;
+import SOA.task3.classes.SimpleLink;
 import SOA.task3.exceptions.IdNotFoundException;
 import SOA.task3.services.GnomeService;
 import jakarta.validation.constraints.Min;
@@ -80,42 +81,46 @@ public class Gnomes {
 		return gnomeService.deleteGnome(gnomeId);
 	}
 
-	// Add HATEOAS links for creator and owner
 	private void addHateoasLinks(Gnome gnome) {
-		// Check if the self link is already present, and add it if not
-		boolean selfLinkExists = gnome.getLinks().stream().anyMatch(link -> "self".equals(link.getRel()));
+	    // Check if the self link is already present, and add it if not
+	    boolean selfLinkExists = gnome.getLinks().stream().anyMatch(link -> "self".equals(link.getRel()));
 
-		if (!selfLinkExists) {
-			Link selfLink = Link
-					.fromUri(uriInfo.getBaseUriBuilder().path(Gnomes.class).path(Long.toString(gnome.getId())).build())
-					.rel("self").build();
-			gnome.addLink(selfLink);
-		}
+	    if (!selfLinkExists) {
+	        String selfHref = uriInfo.getBaseUriBuilder()
+	                .path(Gnomes.class)
+	                .path(Long.toString(gnome.getId()))
+	                .build()
+	                .toString();
+	        gnome.addLink(new SimpleLink("self", selfHref));
+	    }
 
-		// Check if the creator link is already present, and add it if not
-		boolean creatorLinkExists = "creator"
-				.equals(gnome.getCreator_link() != null ? gnome.getCreator_link().getRel() : null);
+	    // Check if the creator link is already present, and add it if not
+	    boolean creatorLinkExists = gnome.getLinks().stream().anyMatch(link -> "creator".equals(link.getRel()));
 
-		if (!creatorLinkExists) {
-			Link creatorLink = Link.fromUri(
-					uriInfo.getBaseUriBuilder().path("/creator").path(Long.toString(gnome.getCreatorId())).build())
-					.rel("creator").build();
-			gnome.setCreator_link(creatorLink);
-		}
+	    if (!creatorLinkExists) {
+	        String creatorHref = uriInfo.getBaseUriBuilder()
+	                .path("creators")
+	                .path(Long.toString(gnome.getCreatorId()))
+	                .build()
+	                .toString();
+	        gnome.addLink(new SimpleLink("creator", creatorHref));
+	    }
 
-		// Check if the owner link is already present, and add it if not, only if the
-		// owner exists
-		if (gnome.getOwnerId() != -1) {
-			boolean ownerLinkExists = "owner"
-					.equals(gnome.getOwner_link() != null ? gnome.getOwner_link().getRel() : null);
+	    // Check if the owner link is already present, and add it if not, only if the owner exists
+	    if (gnome.getOwnerId() != -1) {
+	        boolean ownerLinkExists = gnome.getLinks().stream().anyMatch(link -> "owner".equals(link.getRel()));
 
-			if (!ownerLinkExists) {
-				Link ownerLink = Link.fromUri(
-						uriInfo.getBaseUriBuilder().path("/owners").path(Long.toString(gnome.getOwnerId())).build())
-						.rel("owner").build();
-				gnome.setOwner_link(ownerLink);
-			}
-		}
+	        if (!ownerLinkExists) {
+	            String ownerHref = uriInfo.getBaseUriBuilder()
+	                    .path("owners")
+	                    .path(Long.toString(gnome.getOwnerId()))
+	                    .build()
+	                    .toString();
+	            gnome.addLink(new SimpleLink("owner", ownerHref));
+	        }
+	    }
 	}
+
+
 
 }
