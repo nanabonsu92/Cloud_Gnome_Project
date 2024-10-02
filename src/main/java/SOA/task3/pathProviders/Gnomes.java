@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import SOA.task3.classes.Gnome;
+import SOA.task3.classes.Creator;
 import SOA.task3.classes.SimpleLink;
 import SOA.task3.exceptions.IdNotFoundException;
 import SOA.task3.services.GnomeService;
+import SOA.task3.services.CreatorsService;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -74,6 +76,26 @@ public class Gnomes {
 		updatedGnome.ifPresent(this::addHateoasLinks);
 		return updatedGnome;
 	}
+	
+// New nested resource method for getting the creator of a gnome
+    @GET
+    @Path("/{gnomeId}/creators/{creatorId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Creator getCreatorForGnome(@PathParam("gnomeId") long gnomeId, @PathParam("creatorId") long creatorId) {
+        Optional<Gnome> gnome = gnomeService.getGnomeById(gnomeId);
+        if (!gnome.isPresent()) {
+            throw new IdNotFoundException("Gnome Id: " + gnomeId + " not found");
+        }
+        
+        if (gnome.get().getCreatorId() != creatorId) {
+            throw new IdNotFoundException("Creator Id: " + creatorId + " not found for Gnome Id: " + gnomeId);
+        }
+        CreatorsService creatorsService = new CreatorsService();
+        // Assuming Creator is a class and you have a method to get Creator by ID
+        Creator creator = creatorsService.getCreatorFromId(creatorId, true);  // Assuming you have a CreatorService
+        
+        return creator;
+    }
 
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
