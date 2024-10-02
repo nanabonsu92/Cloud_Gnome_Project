@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import SOA.task3.classes.Creator;
+import SOA.task3.classes.SimpleLink;
 import SOA.task3.exceptions.IdAlreadyInUseException;
 import SOA.task3.services.CreatorsService;
 import jakarta.validation.Valid;
@@ -15,7 +16,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.Link;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
@@ -77,19 +77,30 @@ public class Creators {
 	}
 
 	private void setHATEOASLinks(Creator creator) {
-		Link selfLink = Link
-				.fromUriBuilder(uriInfo.getBaseUriBuilder().path("creators").path(Long.toString(creator.getId())))
-				.rel("self").build();
+	    List<SimpleLink> links = new ArrayList<>();
 
-		List<Link> links = new ArrayList<Link>();
-		links.add(selfLink);
+	    // Create the self link
+	    String selfHref = uriInfo.getBaseUriBuilder()
+	            .path("creators")
+	            .path(Long.toString(creator.getId()))
+	            .build()
+	            .toString();
+	    SimpleLink selfLink = new SimpleLink("self", selfHref);
+	    links.add(selfLink);
 
-		for (Long l : creator.getGnomesIds()) {
-			Link gnomeLink = Link.fromUriBuilder(uriInfo.getBaseUriBuilder().path("gnomes").path(l.toString()))
-					.rel("gnome_" + l.toString()).build();
-			links.add(gnomeLink);
-		}
+	    // Create the links for each gnome associated with the creator
+	    for (Long gnomeId : creator.getGnomesIds()) {
+	        String gnomeHref = uriInfo.getBaseUriBuilder()
+	                .path("gnomes")
+	                .path(gnomeId.toString())
+	                .build()
+	                .toString();
+	        SimpleLink gnomeLink = new SimpleLink("gnome_" + gnomeId, gnomeHref);
+	        links.add(gnomeLink);
+	    }
 
-		creator.setLinks(links);
+	    // Set the links in the creator object
+	    creator.setLinks(links);
 	}
+
 }

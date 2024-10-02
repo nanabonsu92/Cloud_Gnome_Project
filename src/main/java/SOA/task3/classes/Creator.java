@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.core.Link;
+import SOA.task3.classes.SimpleLink;
 
 public class Creator {
 	private long id;
@@ -13,7 +13,7 @@ public class Creator {
 	@NotNull(message = "gnomesIds is required")
 	private ArrayList<Long> gnomesIds;
 
-	private List<Link> links = new ArrayList<>();
+	private List<SimpleLink> links = new ArrayList<>();
 
 	public Creator() {
 	}
@@ -55,11 +55,11 @@ public class Creator {
 		this.gnomesIds = gnomesIds;
 	}
 
-	public List<Link> getLinks() {
+	public List<SimpleLink> getLinks() {
 		return links;
 	}
 
-	public void setLinks(List<Link> links) {
+	public void setLinks(List<SimpleLink> links) {
 		this.links = links;
 	}
 
