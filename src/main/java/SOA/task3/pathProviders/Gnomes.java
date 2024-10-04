@@ -5,10 +5,12 @@ import java.util.Optional;
 
 import SOA.task3.classes.Gnome;
 import SOA.task3.classes.Creator;
+import SOA.task3.classes.Owner;
 import SOA.task3.classes.SimpleLink;
 import SOA.task3.exceptions.IdNotFoundException;
 import SOA.task3.services.GnomeService;
 import SOA.task3.services.CreatorsService;
+import SOA.task3.services.OwnersService;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -95,6 +97,31 @@ public class Gnomes {
         Creator creator = creatorsService.getCreatorFromId(creatorId, true);  // Assuming you have a CreatorService
         
         return creator;
+    }
+    
+    @GET
+    @Path("/{gnomeId}/owners/{ownerId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Owner getOwnerForGnome(@PathParam("gnomeId") long gnomeId, @PathParam("ownerId") long ownerId) {
+        // Fetch the gnome by gnomeId
+        Optional<Gnome> gnome = gnomeService.getGnomeById(gnomeId);
+        if (!gnome.isPresent()) {
+            // If the gnome does not exist, throw a custom exception
+            throw new IdNotFoundException("Gnome Id: " + gnomeId + " not found");
+        }
+        
+        // Check if the gnome is owned by the specified owner
+        if (gnome.get().getOwnerId() != ownerId) {
+            // If the ownerId does not match the ownerId in the gnome, throw an exception
+            throw new IdNotFoundException("Owner Id: " + ownerId + " not found for Gnome Id: " + gnomeId);
+        }
+
+        // Assuming you have an OwnersService to fetch the Owner details
+        OwnersService ownersService = new OwnersService();
+        Owner owner = ownersService.getOwnerFromId(ownerId);  // Fetch the owner details by ownerId
+        
+        // Return the Owner object in the response
+        return owner;
     }
 
 	@DELETE
