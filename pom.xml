@@ -1,6 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>SOA</groupId>
@@ -19,94 +19,58 @@
                 <configuration>
                     <release>21</release>
                 </configuration>
-                <!--
-                <inherited>true</inherited>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-                -->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.4.0</version>
             </plugin>
-            <!-- Tomcat Maven Plugin -->
-        	<plugin>
-	            <groupId>org.apache.tomcat.maven</groupId>
-	            <artifactId>tomcat7-maven-plugin</artifactId>
-	            <version>2.2</version>
-	            <configuration>
-	                <url>http://localhost:8080/manager/text</url> <!-- Tomcat manager URL -->
-	                <server>TomcatServer</server>
-	                <path>/SOA_task3</path> <!-- Context path of your web application -->
-	                <username>admin</username> <!-- Tomcat admin username -->
-	                <password>admin</password> <!-- Tomcat admin password -->
-	            </configuration>
-        	</plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <url>http://localhost:8080/manager/text</url>
+                    <server>TomcatServer</server>
+                    <path>/SOA_task3</path>
+                    <username>admin</username>
+                    <password>admin</password>
+                </configuration>
+            </plugin>
+            
         </plugins>
     </build>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.glassfish.jersey</groupId>
-                <artifactId>jersey-bom</artifactId>
-                <version>${jersey.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
+        <!-- Jersey dependencies -->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
-            <exclusions>
-		        <exclusion>
-		            <groupId>javax.servlet</groupId>
-		            <artifactId>javax.servlet-api</artifactId>
-		        </exclusion>
-		    </exclusions>
+            <version>3.1.8</version>
         </dependency>
+
         <dependency>
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
+            <version>3.1.8</version>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <version>3.1.0</version>
         </dependency>
         
         <dependency>
-	        <groupId>jakarta.ws.rs</groupId>
-	        <artifactId>jakarta.ws.rs-api</artifactId>
-	        <version>3.1.0</version>
-	        <scope>compile</scope>
-    	</dependency>
-      
-        
-        <!-- uncomment this to get JSON support -->
-        
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-json-binding</artifactId>
-        </dependency>
-       
-       
-        <dependency>
-           <groupId>org.json</groupId>
-           <artifactId>json</artifactId>
-           <version>20200518</version>
-        </dependency>
-        
-        <dependency>
-	        <groupId>org.glassfish.jersey.media</groupId>
-	        <artifactId>jersey-media-jaxb</artifactId>
-   		</dependency>
-   		
-	   	<dependency>
+		    <groupId>org.glassfish.jersey.ext</groupId>
+		    <artifactId>jersey-bean-validation</artifactId>
+		    <version>${jersey.version}</version>
+		</dependency>
+		
+		<dependency>
 		    <groupId>jakarta.xml.bind</groupId>
 		    <artifactId>jakarta.xml.bind-api</artifactId>
-		    <version>3.0.1</version> <!-- or the version that matches your project's needs -->
+		    <version>3.0.1</version>
 		</dependency>
 		
 		<dependency>
@@ -114,49 +78,69 @@
 		    <artifactId>jaxb-runtime</artifactId>
 		    <version>3.0.1</version>
 		</dependency>
+
+
+
+        <!-- JSON support -->
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-binding</artifactId>
+            <version>3.1.8</version>
+        </dependency>
+
+        <!-- JWT for authentication -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.11.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.11.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.11.5</version>
+        </dependency>
+
+        <!-- BCrypt for password hashing -->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
+
+        <!-- Jakarta Servlet API -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>5.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Jakarta Validation API -->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.0.0</version>
+        </dependency>
         
-		<dependency>
-		    <groupId>jakarta.servlet</groupId>
-		    <artifactId>jakarta.servlet-api</artifactId>
-		    <version>5.0.0</version> <!-- Ensure the version matches your Tomcat 10 version -->
-    		<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-		    <groupId>jakarta.activation</groupId>
-		    <artifactId>jakarta.activation-api</artifactId>
-		    <version>2.1.0</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>jakarta.validation</groupId>
-		    <artifactId>jakarta.validation-api</artifactId>
-		    <version>3.0.0</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.hibernate.validator</groupId>
-		    <artifactId>hibernate-validator</artifactId>
-		    <version>8.0.1.Final</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.glassfish</groupId>
-		    <artifactId>javax.el</artifactId>
-		    <version>3.0.0</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.glassfish.jersey.ext</groupId>
-		    <artifactId>jersey-bean-validation</artifactId>
-		</dependency>
-		
-		
-        
+        <!-- Hibernate Validator -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>8.0.1.Final</version>
+        </dependency>
+
     </dependencies>
+
     <properties>
-        <jersey.version>3.1.8</jersey.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jersey.version>3.1.8</jersey.version>
     </properties>
-    
+
 </project>
