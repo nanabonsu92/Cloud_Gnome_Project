@@ -3,6 +3,7 @@ package SOA.task3.pathProviders;
 import java.util.List;
 import java.net.URI;
 import SOA.task3.classes.Owner;
+import SOA.task3.classes.SimpleLink;
 import SOA.task3.exceptions.IdAlreadyInUseException;
 import SOA.task3.exceptions.IdNotFoundException;
 import SOA.task3.services.OwnersService;
@@ -15,7 +16,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.core.Link;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
@@ -112,7 +112,7 @@ public class Owners {
         URI selfUri = UriBuilder.fromUri(uriInfo.getAbsolutePath())
                 .path(String.valueOf(owner.getId()))
                 .build();
-        Link selfLink = Link.fromUri(selfUri).rel("self").build();
+        SimpleLink selfLink = new SimpleLink("self", selfUri.toString());
         owner.addLink(selfLink);
 
         // Link to the owner's gnomes
@@ -121,7 +121,7 @@ public class Owners {
                 .path(String.valueOf(owner.getId()))
                 .path("gnomes")  // Assuming an endpoint for gnomes exists
                 .build();
-        Link gnomesLink = Link.fromUri(gnomesUri).rel("gnomes").build();
+        SimpleLink gnomesLink = new SimpleLink("gnomes", gnomesUri.toString());
         owner.addLink(gnomesLink);
     }
 }

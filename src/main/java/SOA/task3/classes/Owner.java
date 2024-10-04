@@ -2,10 +2,11 @@ package SOA.task3.classes;
 
 import java.util.ArrayList;
 import java.util.List;
+import SOA.task3.classes.SimpleLink;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import jakarta.ws.rs.core.Link;
+
 
 public class Owner {
 
@@ -20,7 +21,7 @@ public class Owner {
     private List<Gnome> gnomes = new ArrayList<>();
 
     // HATEOAS links
-    private List<Link> links = new ArrayList<>();
+    private List<SimpleLink> links = new ArrayList<>();
 
     public Owner() {
         this.gnomes = new ArrayList<>();
@@ -70,11 +71,11 @@ public class Owner {
     }
 
     // HATEOAS Links handling
-    public List<Link> getLinks() {
+    public List<SimpleLink> getLinks() {
         return links;
     }
 
-    public void addLink(Link link) {
+    public void addLink(SimpleLink link) {
         links.add(link);
     }
 }
