@@ -15,7 +15,7 @@ public class UserService {
 	    );
     private static long idCounter = 1;
 
-    public User registerUser(String username, String password, String email) {
+    public User registerUser(String username, String password, String email, List<String> roles) {
         if (getUserByUsername(username) != null) {
             throw new RuntimeException("Username already exists");
         }
@@ -23,6 +23,7 @@ public class UserService {
         String hashedPassword = hashPassword(password);
         User newUser = new User(username, hashedPassword, email);
         newUser.setId(idCounter++);
+        newUser.setRoles(roles);
 
         userList.add(newUser);
         return newUser;

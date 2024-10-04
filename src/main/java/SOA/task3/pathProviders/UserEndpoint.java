@@ -1,5 +1,8 @@
 package SOA.task3.pathProviders;
 
+import java.util.Arrays;
+import java.util.List;
+
 import SOA.task3.classes.User;
 import SOA.task3.services.TokenService;
 import SOA.task3.services.UserService;
@@ -19,15 +22,24 @@ public class UserEndpoint {
 
     @POST
     @Path("/register")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response registerUser(User user) {
         try {
-            User newUser = userService.registerUser(user.getUsername(), user.getPassword(), user.getEmail());
+        	// If roles are specified in the request body, use them. Otherwise, assign default role "user".
+            List<String> roles;
+            if (user.getRoles() == null || user.getRoles().isEmpty()) {
+                roles = Arrays.asList("user");  // Assign default role "user" if no roles are provided
+            } else {
+                roles = user.getRoles();  // Use the roles provided in the request body
+            }
+
+            // Register the user with the default role
+            User newUser = userService.registerUser(user.getUsername(), user.getPassword(), user.getEmail(), roles);
             return Response.ok(newUser).build();
         } catch (RuntimeException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
-
 
     @POST
     @Path("/login")
@@ -37,9 +49,12 @@ public class UserEndpoint {
         if (existingUser == null || !userService.checkPassword(user.getPassword(), existingUser.getPassword())) {
             return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid credentials").build();
         }
+        
+        // Get user roles from the User object
+        List<String> roles = existingUser.getRoles();
 
         //Generate JWT token for the user
-        String token = tokenService.generateTokenForUser(existingUser.getUsername());
+        String token = tokenService.generateTokenForUser(existingUser.getUsername(), roles);
 
         return Response.ok(token).build();
     }

@@ -3,6 +3,7 @@ package SOA.task3.classes;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 
 public class User {
     private long id;
@@ -17,9 +18,11 @@ public class User {
 
     @Email(message = "Email should be valid")
     private String email;
+    private List<String> roles;
 
     private String firstName;
     private String lastName;
+    
 
     // Constructors, getters, and setters
     public User() {
@@ -29,6 +32,7 @@ public class User {
         this.setUsername(username);
         this.setPassword(password);
         this.setEmail(email);
+        this.roles = roles;
     }
 
     public String getLastName() {
@@ -78,5 +82,13 @@ public class User {
     public void setId(long id) {
 		this.id = id;
 	}
+    
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
 
 }
