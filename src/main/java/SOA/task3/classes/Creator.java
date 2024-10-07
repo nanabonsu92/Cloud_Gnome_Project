@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.constraints.NotNull;
-import SOA.task3.classes.SimpleLink;
 
 public class Creator {
 	private long id;
