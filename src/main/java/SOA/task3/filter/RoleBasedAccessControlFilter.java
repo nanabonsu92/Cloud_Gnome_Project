@@ -43,13 +43,14 @@ public class RoleBasedAccessControlFilter implements ContainerRequestFilter {
 	private static final ErrorMessage INVALID_TOKEN = new ErrorMessage("Invalid token", 401, "http://myDocs.org");
 	private static final ErrorMessage NO_AUTH_METHOD = new ErrorMessage("No valid authorization header type provided",
 			401, "http://myDocs.org");
+	private static final ErrorMessage AUTH_SYNTAX_ERROR = new ErrorMessage("Invalid authentication syntax", 400,
+			"http://myDocs.org");
 
 	@Context
 	private ResourceInfo resourceInfo;
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) {
-		// No annotation, no auth required
 		Method resMethod = resourceInfo.getResourceMethod();
 
 		// Method
@@ -113,24 +114,32 @@ public class RoleBasedAccessControlFilter implements ContainerRequestFilter {
 	}
 
 	private List<String> getRolesBasic(ContainerRequestContext requestContext) {
-		String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+		String username = "";
+		String password = "";
+		try {
+			String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
 
-		String base64Credentials = authorizationHeader.substring(AUTHORIZATION_PREFIX_BASIC.length()).trim();
-		String credentials = new String(Base64.getDecoder().decode(base64Credentials), StandardCharsets.UTF_8);
-		final String[] values = credentials.split(":", 2);
-		String username = values[0];
-		String password = values[1];
+			String base64Credentials = authorizationHeader.substring(AUTHORIZATION_PREFIX_BASIC.length()).trim();
+			String credentials = new String(Base64.getDecoder().decode(base64Credentials), StandardCharsets.UTF_8);
+			final String[] values = credentials.split(":", 2);
+			username = values[0];
+			password = values[1];
+		} catch (Exception e) {
+			Response response = Response.status(Response.Status.BAD_REQUEST).entity(AUTH_SYNTAX_ERROR).build();
+			requestContext.abortWith(response);
+			return null;
+		}
 
 		UserService userService = new UserService();
 		User user = userService.getUserByUsername(username);
 		if (user == null) {
-			Response response = Response.status(Response.Status.FORBIDDEN).entity(INVALID_CREDENTIALS).build();
+			Response response = Response.status(Response.Status.UNAUTHORIZED).entity(INVALID_CREDENTIALS).build();
 			requestContext.abortWith(response);
 			return null;
 		}
 
 		if (!UserService.checkPassword(password, user.getPassword())) {
-			Response response = Response.status(Response.Status.FORBIDDEN).entity(INVALID_CREDENTIALS).build();
+			Response response = Response.status(Response.Status.UNAUTHORIZED).entity(INVALID_CREDENTIALS).build();
 			requestContext.abortWith(response);
 			return null;
 		}

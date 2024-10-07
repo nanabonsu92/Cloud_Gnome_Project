@@ -58,7 +58,7 @@ public class RESTClient {
 
 		WebTarget gnomesTarget = baseTarget.path("gnomes");
 
-		String name = "stabiaal";
+		String name = "stabil";
 		String password = "12345678";
 
 		User newUser = new User(name, password, "a@bc.com");
@@ -75,5 +75,7 @@ public class RESTClient {
 		System.out.println("Base64 encoded auth string: " + authStringEnc);
 		Response getResponse = gnomesTarget.request().header("Authorization", "Basic " + authStringEnc).get();
 		System.out.println(getResponse);
+		String res = getResponse.readEntity(String.class);
+		System.out.println(res);
 	}
 }

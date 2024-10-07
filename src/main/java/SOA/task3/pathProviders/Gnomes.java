@@ -66,8 +66,8 @@ public class Gnomes {
 	@RolesAllowed("admin")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Gnome setGnome(
-			@QueryParam("nickname") @NotNull(message = "Nickname cannot be null") @Size(min = 3, max = 50, message = "Nickname must be between 3 and 50 characters") String nickName,
-			@QueryParam("creatorId") @NotNull(message = "creatorId cannot be null") @Min(value = 0, message = "Creator ID must be a positive number") long creatorId) {
+			@QueryParam("nickName") @NotNull(message = "nickName cannot be null") @Size(min = 3, max = 50, message = "nickName must be between 3 and 50 characters") String nickName,
+			@QueryParam("creatorId") @Min(value = 0, message = "Creator ID must be a positive number") long creatorId) {
 		Gnome new_gnome = gnomeService.addGnome(nickName, creatorId);
 		addHateoasLinks(new_gnome);
 
