@@ -11,6 +11,8 @@ import SOA.task3.exceptions.IdNotFoundException;
 import SOA.task3.services.CreatorsService;
 import SOA.task3.services.GnomeService;
 import SOA.task3.services.OwnersService;
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -27,6 +29,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.UriInfo;
 
 @Path("/gnomes")
+@PermitAll
 @Produces(MediaType.APPLICATION_JSON)
 public class Gnomes {
 	// Access the singleton instance of GnomeServic
@@ -36,6 +39,7 @@ public class Gnomes {
 	private UriInfo uriInfo;
 
 	@GET
+	@RolesAllowed({ "admin", "user" })
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Gnome> getGnomes() {
 		List<Gnome> gnomes = gnomeService.getAllGnomes();
@@ -48,6 +52,7 @@ public class Gnomes {
 
 	@GET
 	@Path("/{gnomeId}")
+	@RolesAllowed({ "admin", "user" })
 	@Produces(MediaType.APPLICATION_JSON)
 	public Gnome getGnomeById(@PathParam("gnomeId") long gnomeId) {
 		Optional<Gnome> gnome = gnomeService.getGnomeById(gnomeId);
@@ -58,6 +63,7 @@ public class Gnomes {
 	}
 
 	@POST
+	@RolesAllowed("admin")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Gnome setGnome(
 			@QueryParam("nickname") @NotNull(message = "Nickname cannot be null") @Size(min = 3, max = 50, message = "Nickname must be between 3 and 50 characters") String nickName,
@@ -69,6 +75,7 @@ public class Gnomes {
 	}
 
 	@PUT
+	@RolesAllowed("admin")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Optional<Gnome> updateGnomeOwner(
 			@QueryParam("gnomeId") @NotNull(message = "gnomeId cannot be null") long gnomeId,
@@ -81,6 +88,7 @@ public class Gnomes {
 // New nested resource method for getting the creator of a gnome
 	@GET
 	@Path("/{gnomeId}/creators/{creatorId}")
+	@RolesAllowed({ "admin", "user" })
 	@Produces(MediaType.APPLICATION_JSON)
 	public Creator getCreatorForGnome(@PathParam("gnomeId") long gnomeId, @PathParam("creatorId") long creatorId) {
 		Optional<Gnome> gnome = gnomeService.getGnomeById(gnomeId);
@@ -100,6 +108,7 @@ public class Gnomes {
 
 	@GET
 	@Path("/{gnomeId}/owners/{ownerId}")
+	@RolesAllowed({ "admin", "user" })
 	@Produces(MediaType.APPLICATION_JSON)
 	public Owner getOwnerForGnome(@PathParam("gnomeId") long gnomeId, @PathParam("ownerId") long ownerId) {
 		// Fetch the gnome by gnomeId
@@ -124,6 +133,7 @@ public class Gnomes {
 	}
 
 	@DELETE
+	@RolesAllowed("admin")
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean deleteGnome(@QueryParam("gnomeId") @NotNull(message = "gnomeId cannot be null") long gnomeId) {
 		return gnomeService.deleteGnome(gnomeId);

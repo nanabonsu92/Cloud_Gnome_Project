@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import SOA.task3.classes.Gnome;
-import SOA.task3.exceptions.IdNotFoundException;
 import SOA.task3.classes.SimpleLink;
+import SOA.task3.exceptions.IdNotFoundException;
 
 public class GnomeService {
 	// The singleton instance, declared as volatile for thread safety
@@ -70,34 +70,33 @@ public class GnomeService {
 	}
 
 	private void setCreator_link(long gnomeId, long creatorId) {
-	    Optional<Gnome> gnome = getGnomeById(gnomeId);
-	    if (gnome.isPresent()) {
-	        // Create the creator link using SimpleLink
-	        String creatorHref = "/creator/" + creatorId;
-	        SimpleLink creatorLink = new SimpleLink("creator", creatorHref);
+		Optional<Gnome> gnome = getGnomeById(gnomeId);
+		if (gnome.isPresent()) {
+			// Create the creator link using SimpleLink
+			String creatorHref = "/creators/" + creatorId;
+			SimpleLink creatorLink = new SimpleLink("creator", creatorHref);
 
-	        // Add the creator link to the gnome object
-	        gnome.get().addLink(creatorLink);
+			// Add the creator link to the gnome object
+			gnome.get().addLink(creatorLink);
 
-	    } else {
-	        throw new IdNotFoundException("Gnome Id: " + gnomeId + " not found");
-	    }
+		} else {
+			throw new IdNotFoundException("Gnome Id: " + gnomeId + " not found");
+		}
 	}
 
 	private void setOwner_link(long gnomeId, long ownerId) {
-	    Optional<Gnome> gnome = getGnomeById(gnomeId);
-	    if (gnome.isPresent()) {
-	        // Create the owner link using SimpleLink
-	        String ownerHref = "/owner/" + ownerId;
-	        SimpleLink ownerLink = new SimpleLink("owner", ownerHref);
+		Optional<Gnome> gnome = getGnomeById(gnomeId);
+		if (gnome.isPresent()) {
+			// Create the owner link using SimpleLink
+			String ownerHref = "/owners/" + ownerId;
+			SimpleLink ownerLink = new SimpleLink("owner", ownerHref);
 
-	        // Add the owner link to the gnome object
-	        gnome.get().addLink(ownerLink);
+			// Add the owner link to the gnome object
+			gnome.get().addLink(ownerLink);
 
-	    } else {
-	        throw new IdNotFoundException("Gnome Id: " + gnomeId + " not found");
-	    }
+		} else {
+			throw new IdNotFoundException("Gnome Id: " + gnomeId + " not found");
+		}
 	}
-
 
 }

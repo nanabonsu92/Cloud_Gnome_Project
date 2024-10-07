@@ -20,4 +20,11 @@
         <servlet-name>Jersey Web Application</servlet-name>
         <url-pattern>/api/*</url-pattern> <!-- URL pattern for the REST resources -->
     </servlet-mapping>
+    
+    <security-constraint>
+	    <web-resource-collection>
+	        <web-resource-name>No Access Control</web-resource-name>
+	        <url-pattern>/*</url-pattern>
+	    </web-resource-collection>
+    </security-constraint>
 </web-app>

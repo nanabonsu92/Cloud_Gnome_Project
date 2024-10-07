@@ -6,6 +6,7 @@ import java.util.List;
 import SOA.task3.classes.User;
 import SOA.task3.services.TokenService;
 import SOA.task3.services.UserService;
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
@@ -23,6 +24,7 @@ public class UserEndpoint {
 
 	@POST
 	@Path("/register")
+	@PermitAll
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response registerUser(@Valid User user) {
 		try {
@@ -45,10 +47,12 @@ public class UserEndpoint {
 
 	@POST
 	@Path("/login")
+	@PermitAll
+	// No Security Annotation, everybody can access it
 	public Response loginUser(@Valid User user) {
 		User existingUser = userService.getUserByUsername(user.getUsername());
 
-		if (existingUser == null || !userService.checkPassword(user.getPassword(), existingUser.getPassword())) {
+		if (existingUser == null || !UserService.checkPassword(user.getPassword(), existingUser.getPassword())) {
 			return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid credentials").build();
 		}
 

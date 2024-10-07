@@ -7,6 +7,7 @@ import SOA.task3.classes.Creator;
 import SOA.task3.classes.SimpleLink;
 import SOA.task3.exceptions.IdAlreadyInUseException;
 import SOA.task3.services.CreatorsService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -30,6 +31,7 @@ public class Creators {
 	private UriInfo uriInfo;
 
 	@GET
+	@RolesAllowed({ "admin", "user" })
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Creator> getPublications() {
 		List<Creator> list = creatorsService.getAllCreators();
@@ -40,6 +42,7 @@ public class Creators {
 	}
 
 	@GET
+	@RolesAllowed({ "admin", "user" })
 	@Path("/{creatorId}")
 	public Creator getCreator(@PathParam("creatorId") long id) {
 		Creator creator = creatorsService.getCreatorFromId(id, true);
@@ -49,6 +52,7 @@ public class Creators {
 	}
 
 	@POST
+	@RolesAllowed("admin")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addCreator(@Valid Creator ceator) {
 		// TODO: Check if gnome ids are valid
@@ -63,6 +67,7 @@ public class Creators {
 
 	@PUT
 	@Path("/{creatorId}")
+	@RolesAllowed("admin")
 	public Creator updateCreator(@PathParam("creatorId") long id, @Valid Creator creator) {
 		Creator c = creatorsService.updateCreator(id, creator);
 		setHATEOASLinks(c);
@@ -71,36 +76,30 @@ public class Creators {
 
 	@DELETE
 	@Path("/{creatorId}")
+	@RolesAllowed("admin")
 	public Creator deleteCreator(@PathParam("creatorId") long id) {
 		Creator c = creatorsService.deleteCreator(id);
 		return c;
 	}
 
 	private void setHATEOASLinks(Creator creator) {
-	    List<SimpleLink> links = new ArrayList<>();
+		List<SimpleLink> links = new ArrayList<>();
 
-	    // Create the self link
-	    String selfHref = uriInfo.getBaseUriBuilder()
-	            .path("creators")
-	            .path(Long.toString(creator.getId()))
-	            .build()
-	            .toString();
-	    SimpleLink selfLink = new SimpleLink("self", selfHref);
-	    links.add(selfLink);
+		// Create the self link
+		String selfHref = uriInfo.getBaseUriBuilder().path("creators").path(Long.toString(creator.getId())).build()
+				.toString();
+		SimpleLink selfLink = new SimpleLink("self", selfHref);
+		links.add(selfLink);
 
-	    // Create the links for each gnome associated with the creator
-	    for (Long gnomeId : creator.getGnomesIds()) {
-	        String gnomeHref = uriInfo.getBaseUriBuilder()
-	                .path("gnomes")
-	                .path(gnomeId.toString())
-	                .build()
-	                .toString();
-	        SimpleLink gnomeLink = new SimpleLink("gnome_" + gnomeId, gnomeHref);
-	        links.add(gnomeLink);
-	    }
+		// Create the links for each gnome associated with the creator
+		for (Long gnomeId : creator.getGnomesIds()) {
+			String gnomeHref = uriInfo.getBaseUriBuilder().path("gnomes").path(gnomeId.toString()).build().toString();
+			SimpleLink gnomeLink = new SimpleLink("gnome_" + gnomeId, gnomeHref);
+			links.add(gnomeLink);
+		}
 
-	    // Set the links in the creator object
-	    creator.setLinks(links);
+		// Set the links in the creator object
+		creator.setLinks(links);
 	}
 
 }
