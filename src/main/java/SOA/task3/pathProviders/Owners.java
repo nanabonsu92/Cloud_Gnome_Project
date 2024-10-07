@@ -1,30 +1,30 @@
 package SOA.task3.pathProviders;
 
-import java.util.List;
 import java.net.URI;
+import java.util.List;
+
 import SOA.task3.classes.Owner;
 import SOA.task3.classes.Creator;
 import SOA.task3.classes.Gnome;
 import SOA.task3.classes.SimpleLink;
-import SOA.task3.exceptions.IdAlreadyInUseException;
 import SOA.task3.exceptions.IdNotFoundException;
 import SOA.task3.services.OwnersService;
 import SOA.task3.services.GnomeService;
 import SOA.task3.services.CreatorsService;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
 import jakarta.ws.rs.core.UriInfo;
-import jakarta.ws.rs.core.Context;
 
 @Path("/owners")
 @Produces(MediaType.APPLICATION_JSON)
