@@ -3,10 +3,14 @@ package SOA.task3.pathProviders;
 import java.util.List;
 import java.net.URI;
 import SOA.task3.classes.Owner;
+import SOA.task3.classes.Creator;
+import SOA.task3.classes.Gnome;
 import SOA.task3.classes.SimpleLink;
 import SOA.task3.exceptions.IdAlreadyInUseException;
 import SOA.task3.exceptions.IdNotFoundException;
 import SOA.task3.services.OwnersService;
+import SOA.task3.services.GnomeService;
+import SOA.task3.services.CreatorsService;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -27,6 +31,7 @@ import jakarta.ws.rs.core.Context;
 @Consumes(MediaType.APPLICATION_JSON)
 public class Owners {
     OwnersService ownersService = new OwnersService();
+    GnomeService gnomeService = GnomeService.getInstance();
 
     @Context
     UriInfo uriInfo;  // Injects information about the current URI
@@ -57,6 +62,31 @@ public class Owners {
         addLinksToOwner(owner);
 
         return Response.ok(owner).build();
+    }
+    
+    // Nested Resource: Get all gnomes for an owner
+    @GET
+    @Path("/{ownerId}/gnomes")
+    public Response getGnomesForOwner(@PathParam("ownerId") long ownerId) {
+        Owner owner = ownersService.getOwnerFromId(ownerId);
+        List<Gnome> gnomes = owner.getGnomes();
+        return Response.ok(gnomes).build();
+    }
+    
+    // Nested Resource: Get creator of a specific gnome for an owner
+    @GET
+    @Path("/{ownerId}/gnomes/{gnomeId}/creator")
+    public Response getCreatorForOwnerGnome(@PathParam("ownerId") long ownerId, @PathParam("gnomeId") long gnomeId) {
+        Owner owner = ownersService.getOwnerFromId(ownerId);
+        Gnome gnome = gnomeService.getGnomeById(gnomeId)
+                .orElseThrow(() -> new IdNotFoundException("Gnome Id: " + gnomeId + " not found"));
+
+        if (gnome.getOwnerId() != ownerId) {
+            throw new IdNotFoundException("Gnome does not belong to this owner.");
+        }
+
+        Creator creator = new CreatorsService().getCreatorFromId(gnome.getCreatorId(), true);
+        return Response.ok(creator).build();
     }
 
     // POST /owners - Add a new owner
