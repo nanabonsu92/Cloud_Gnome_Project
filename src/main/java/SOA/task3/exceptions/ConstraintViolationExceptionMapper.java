@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import SOA.task3.ErrorMessage;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.ExceptionMapper;
@@ -21,6 +22,6 @@ public class ConstraintViolationExceptionMapper implements ExceptionMapper<Const
 				.collect(Collectors.joining(", "));
 
 		ErrorMessage errorMessage = new ErrorMessage(errorMessageStr, 400, "http://myDocs.org");
-		return Response.status(Status.NOT_FOUND).entity(errorMessage).build();
+		return Response.status(Status.NOT_FOUND).entity(errorMessage).type(MediaType.APPLICATION_JSON).build();
 	}
 }

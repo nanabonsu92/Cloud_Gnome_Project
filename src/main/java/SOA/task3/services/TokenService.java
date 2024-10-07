@@ -25,8 +25,9 @@ public class TokenService {
 
 	public List<String> getRolesFromToken(String token) {
 		Claims claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody();
+		List<?> resTmp = claims.get("roles", List.class); // Extract the roles
 		@SuppressWarnings("unchecked")
-		List<String> res = (List<String>) (claims.get("roles", List.class)); // Extract the roles
+		List<String> res = (List<String>) resTmp;
 		return res;
 	}
 

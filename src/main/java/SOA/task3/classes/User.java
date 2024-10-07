@@ -1,5 +1,6 @@
 package SOA.task3.classes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.constraints.Email;
@@ -10,14 +11,14 @@ public class User {
 	private long id;
 
 	@NotNull(message = "Username cannot be null")
-	@Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
+	@Size(min = 3, max = 50, message = "username must be between 3 and 50 characters")
 	private String username;
 
-	@NotNull(message = "Password cannot be null")
-	@Size(min = 8, message = "Password must be at least 8 characters")
+	@NotNull(message = "password cannot be null")
+	@Size(min = 8, message = "password must be at least 8 characters")
 	private String password;
 
-	@Email(message = "Email should be valid")
+	@Email(message = "email should be valid")
 	private String email;
 	private List<String> roles;
 
@@ -32,6 +33,12 @@ public class User {
 		this.setUsername(username);
 		this.setPassword(password);
 		this.setEmail(email);
+		this.roles = new ArrayList<String>(); // So its never null
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Id: %d; email: %s; Roles: %s", id, email, roles == null ? "null" : roles.toString());
 	}
 
 	public String getLastName() {
