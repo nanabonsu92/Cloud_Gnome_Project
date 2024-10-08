@@ -48,7 +48,6 @@ public class UserEndpoint {
 	@POST
 	@Path("/login")
 	@PermitAll
-	// No Security Annotation, everybody can access it
 	public Response loginUser(@Valid User user) {
 		User existingUser = userService.getUserByUsername(user.getUsername());
 
@@ -63,5 +62,4 @@ public class UserEndpoint {
 		String token = tokenService.generateTokenForUser(existingUser.getUsername(), roles);
 		return Response.ok(token).build();
 	}
-
 }

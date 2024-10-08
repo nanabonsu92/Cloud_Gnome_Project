@@ -11,6 +11,7 @@ import SOA.task3.exceptions.IdNotFoundException;
 import SOA.task3.services.CreatorsService;
 import SOA.task3.services.GnomeService;
 import SOA.task3.services.OwnersService;
+import jakarta.annotation.security.DenyAll;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.constraints.Min;
@@ -137,6 +138,14 @@ public class Gnomes {
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean deleteGnome(@QueryParam("gnomeId") @NotNull(message = "gnomeId cannot be null") long gnomeId) {
 		return gnomeService.deleteGnome(gnomeId);
+	}
+
+	@GET
+	@Path("/secretGnome")
+	@DenyAll
+	@Produces(MediaType.TEXT_PLAIN)
+	public String secret() {
+		return "Oh no, this should be secret!";
 	}
 
 	private void addHateoasLinks(Gnome gnome) {

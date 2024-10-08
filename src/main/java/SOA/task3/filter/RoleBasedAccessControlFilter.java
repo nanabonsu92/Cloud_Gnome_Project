@@ -20,6 +20,7 @@ import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.container.ResourceInfo;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
 
@@ -58,7 +59,8 @@ public class RoleBasedAccessControlFilter implements ContainerRequestFilter {
 			return;
 		}
 		if (resMethod.isAnnotationPresent(DenyAll.class)) {
-			Response response = Response.status(Response.Status.FORBIDDEN).entity(FORBIDDEN_ErrMESSAGE).build();
+			Response response = Response.status(Response.Status.FORBIDDEN).entity(FORBIDDEN_ErrMESSAGE)
+					.type(MediaType.APPLICATION_JSON).build();
 			requestContext.abortWith(response);
 			return;
 		}
@@ -71,7 +73,7 @@ public class RoleBasedAccessControlFilter implements ContainerRequestFilter {
 
 			if (!UserService.checkRoles(roles, Arrays.asList(rolesAllowed.value()))) {
 				Response response = Response.status(Response.Status.UNAUTHORIZED).entity(UNAUTHORIZED_ErrMESSAGE)
-						.build();
+						.type(MediaType.APPLICATION_JSON).build();
 				requestContext.abortWith(response);
 			}
 			return;
@@ -81,7 +83,8 @@ public class RoleBasedAccessControlFilter implements ContainerRequestFilter {
 	private List<String> getRoles(ContainerRequestContext requestContext) {
 		String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
 		if (authorizationHeader == null) {
-			Response response = Response.status(Response.Status.UNAUTHORIZED).entity(NO_AUTH_HEADER).build();
+			Response response = Response.status(Response.Status.UNAUTHORIZED).entity(NO_AUTH_HEADER)
+					.type(MediaType.APPLICATION_JSON).build();
 			requestContext.abortWith(response);
 			return null;
 		}
@@ -92,7 +95,8 @@ public class RoleBasedAccessControlFilter implements ContainerRequestFilter {
 		if (authorizationHeader.startsWith(AUTHORIZATION_PREFIX_BASIC)) {
 			return getRolesBasic(requestContext);
 		}
-		Response response = Response.status(Response.Status.UNAUTHORIZED).entity(NO_AUTH_METHOD).build();
+		Response response = Response.status(Response.Status.UNAUTHORIZED).entity(NO_AUTH_METHOD)
+				.type(MediaType.APPLICATION_JSON).build();
 		requestContext.abortWith(response);
 		return null;
 	}
@@ -105,7 +109,8 @@ public class RoleBasedAccessControlFilter implements ContainerRequestFilter {
 			String token = authorizationHeader.substring("Bearer".length()).trim();
 			res = tokenService.getRolesFromToken(token);
 		} catch (Exception e) {
-			Response response = Response.status(Response.Status.UNAUTHORIZED).entity(INVALID_TOKEN).build();
+			Response response = Response.status(Response.Status.UNAUTHORIZED).entity(INVALID_TOKEN)
+					.type(MediaType.APPLICATION_JSON).build();
 			requestContext.abortWith(response);
 			return null;
 		}
@@ -125,7 +130,8 @@ public class RoleBasedAccessControlFilter implements ContainerRequestFilter {
 			username = values[0];
 			password = values[1];
 		} catch (Exception e) {
-			Response response = Response.status(Response.Status.BAD_REQUEST).entity(AUTH_SYNTAX_ERROR).build();
+			Response response = Response.status(Response.Status.BAD_REQUEST).entity(AUTH_SYNTAX_ERROR)
+					.type(MediaType.APPLICATION_JSON).build();
 			requestContext.abortWith(response);
 			return null;
 		}
@@ -133,13 +139,15 @@ public class RoleBasedAccessControlFilter implements ContainerRequestFilter {
 		UserService userService = new UserService();
 		User user = userService.getUserByUsername(username);
 		if (user == null) {
-			Response response = Response.status(Response.Status.UNAUTHORIZED).entity(INVALID_CREDENTIALS).build();
+			Response response = Response.status(Response.Status.UNAUTHORIZED).entity(INVALID_CREDENTIALS)
+					.type(MediaType.APPLICATION_JSON).build();
 			requestContext.abortWith(response);
 			return null;
 		}
 
 		if (!UserService.checkPassword(password, user.getPassword())) {
-			Response response = Response.status(Response.Status.UNAUTHORIZED).entity(INVALID_CREDENTIALS).build();
+			Response response = Response.status(Response.Status.UNAUTHORIZED).entity(INVALID_CREDENTIALS)
+					.type(MediaType.APPLICATION_JSON).build();
 			requestContext.abortWith(response);
 			return null;
 		}

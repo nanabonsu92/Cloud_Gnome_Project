@@ -13,11 +13,11 @@ import jakarta.ws.rs.core.Response;
 
 public class RESTClient {
 	public static void main(String[] args) {
-		testBasicAuth();
-		// testJWS();
+		// testBasicAuth();
+		testJWT();
 	}
 
-	static void testJWS() {
+	static void testJWT() {
 		Client client = ClientBuilder.newClient();
 		WebTarget baseTarget = client.target("http://localhost:8080/task3/webapi/");
 
